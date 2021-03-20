@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>WhatsApp Api</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<div id="app">
+		<h3>WhatsApp API</h3><hr>
+		<p>Power by bangsyir</p>
+		<img src="" id="qrcode" alt="qrcode" width="300" height="300">
+		<h5>Logs :</h5>
+		<ul id="logs"></ul>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js" integrity="sha512-aC5ZfKOuGRUiJCv+E/EIWsj49E02BQpuLQbixZe+16Lm1R6AepHZA1xvY92XBQNNbwQoqG4DXCGxwoxBFb5Q1A==" crossorigin="anonymous"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', (e) => {
+			var socket = io.connect('http://localhost:9000', {path: '/socket.io'})
+			socket.on('message', (msg) => {
+				var log = document.createElement("li")
+				log.classList.add('log')
+				var text = document.createTextNode(msg)
+				log.appendChild(text)
+				document.getElementById('logs').appendChild(log)
+			})
+			socket.on('qr', (src) => {
+				document.getElementById('qrcode').src = src
+			})
+			socket.on('ready', (src) => {
+				document.getElementById('qrcode').style.visibility = 'hidden'
+			})
+			socket.on('authenticated', (src) => {
+				document.getElementById('qrcode').style.visibility = 'hidden'
+			})
+		})
+	</script>
+</body>
+</html>
